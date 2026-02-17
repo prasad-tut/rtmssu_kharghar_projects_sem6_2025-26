@@ -1,0 +1,17 @@
+# Maven
+target/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# Config (avoid secrets)
+application-*.yml
+application-*.properties
