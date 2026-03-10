@@ -1,0 +1,172 @@
+server:
+  port: 9100
+
+spring:
+  application:
+    name: api-gateway
+  web:
+    resources:
+      static-locations: file:/Users/mac/Downloads/sem6/ticketmicro/microservices/ui/,classpath:/static/,classpath:/public/,classpath:/resources/,classpath:/META-INF/resources/
+      cache:
+        period: 0
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+              - OPTIONS
+            allowedHeaders: "*"
+            exposedHeaders:
+              - Authorization
+            allowCredentials: false
+      routes:
+        # Auth-User Service Routes - rewrite /api/auth to /auth
+        - id: auth-service
+          uri: http://localhost:9101
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - RewritePath=/api/auth/(?<segment>.*), /auth/${segment}
+            - name: CircuitBreaker
+              args:
+                name: authCircuitBreaker
+                fallbackUri: forward:/fallback/auth
+
+        - id: user-service
+          uri: http://localhost:9101
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: userCircuitBreaker
+                fallbackUri: forward:/fallback/users
+
+        # Ticket Service Routes
+        - id: ticket-service
+          uri: http://localhost:9102
+          predicates:
+            - Path=/api/tickets/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: ticketCircuitBreaker
+                fallbackUri: forward:/fallback/tickets
+
+        # Customer Service Routes
+        - id: customer-service
+          uri: http://localhost:9103
+          predicates:
+            - Path=/api/customer/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: customerCircuitBreaker
+                fallbackUri: forward:/fallback/customer
+
+        - id: customer-messages
+          uri: http://localhost:9103
+          predicates:
+            - Path=/api/messages/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: messagesCircuitBreaker
+                fallbackUri: forward:/fallback/messages
+
+        # Admin Service Routes
+        - id: admin-service
+          uri: http://localhost:9104
+          predicates:
+            - Path=/api/admin/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: adminCircuitBreaker
+                fallbackUri: forward:/fallback/admin
+
+        # Executive Service Routes
+        - id: executive-service
+          uri: http://localhost:9105
+          predicates:
+            - Path=/api/executive/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: executiveCircuitBreaker
+                fallbackUri: forward:/fallback/executive
+
+# Circuit Breaker Configuration
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 80
+        eventConsumerBufferSize: 20
+        slowCallRateThreshold: 80
+        slowCallDurationThreshold: 20s
+    instances:
+      authCircuitBreaker:
+        baseConfig: default
+      userCircuitBreaker:
+        baseConfig: default
+      ticketCircuitBreaker:
+        baseConfig: default
+      customerCircuitBreaker:
+        baseConfig: default
+      messagesCircuitBreaker:
+        baseConfig: default
+      adminCircuitBreaker:
+        baseConfig: default
+      executiveCircuitBreaker:
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 60s
+    instances:
+      authCircuitBreaker:
+        baseConfig: default
+      userCircuitBreaker:
+        baseConfig: default
+      ticketCircuitBreaker:
+        baseConfig: default
+      customerCircuitBreaker:
+        baseConfig: default
+      messagesCircuitBreaker:
+        baseConfig: default
+      adminCircuitBreaker:
+        baseConfig: default
+      executiveCircuitBreaker:
+        baseConfig: default
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    io.github.resilience4j: DEBUG

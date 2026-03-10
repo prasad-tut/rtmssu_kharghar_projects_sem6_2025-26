@@ -1,0 +1,7 @@
+id,category,closed_at,created_at,customer_id,description,executive_id,priority,product_id,rating,resolution_notes,resolved_at,status,title,updated_at,deleted
+6,TECHNICAL,,2026-01-22 18:44:14.99302,9,what is the final price ,15,LOW,1,,,2026-01-22 18:49:28.305816,RESOLVED,"Issue with MacBook Pro 16""",2026-01-22 18:49:28.306923,f
+7,TECHNICAL,,2026-01-22 19:17:23.155682,9,dxasxawxawx,17,LOW,1,,,2026-01-23 13:22:49.570378,RESOLVED,adaxSC,2026-01-23 13:22:49.588259,f
+8,TECHNICAL,,2026-01-23 15:20:53.921769,9,"price
+",16,LOW,6,,,2026-01-23 16:58:12.246421,RESOLVED,Issue with iPhone 15,2026-01-23 16:58:12.24928,f
+9,GENERAL,,2026-01-23 17:04:03.449032,9,You have only white color ?? any other colors ,16,MEDIUM,7,,,,OPEN,Issue with OnePlus buds 3,2026-01-23 17:05:45.874547,f
+10,BILLING,,2026-01-23 17:04:50.367302,9,what is the final price any discounts ,15,LOW,7,,,,OPEN,Issue with OnePlus buds 3,2026-01-23 17:06:34.56654,f

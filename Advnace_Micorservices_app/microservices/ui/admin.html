@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - TicketHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/min.css?v=1.3">
+    <link rel="stylesheet" href="css/mobile.css">
+    <style>
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .status-dot.online {
+            background-color: #28a745;
+            box-shadow: 0 0 4px #28a745;
+        }
+
+        .status-dot.offline {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" style="display: none;">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+
+    <div class="dashboard">
+        <div class="particles"></div>
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="brand-logo-anim">
+                        <div class="box"></div>
+                        <svg viewBox="0 0 100 100" class="brand-logo-svg">
+                            <g id="clipping">
+                                <circle cx="35" cy="35" r="28" fill="white"></circle>
+                                <circle cx="65" cy="35" r="24" fill="white"></circle>
+                                <circle cx="50" cy="65" r="32" fill="white"></circle>
+                                <circle cx="40" cy="50" r="20" fill="white"></circle>
+                                <circle cx="60" cy="50" r="18" fill="white"></circle>
+                                <circle cx="50" cy="35" r="22" fill="white"></circle>
+                                <circle cx="50" cy="50" r="25" fill="white"></circle>
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="brand-text-part">Ticket</span>
+                    <span class="brand-text-part">Hub</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Overview</div>
+                    <a class="nav-item active" onclick="showSection('dashboard')">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Management</div>
+                    <a class="nav-item" onclick="showSection('tickets')">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>All Tickets</span>
+                    </a>
+                    <a class="nav-item" onclick="showSection('products')">
+                        <i class="fas fa-box"></i>
+                        <span>Products</span>
+                    </a>
+                    <a class="nav-item" onclick="showSection('users')">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                    <a class="nav-item" onclick="showSection('executives')">
+                        <i class="fas fa-headset"></i>
+                        <span>Executives</span>
+                    </a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <a class="nav-item" onclick="Theme.toggle()" style="margin: 0 0 1rem 0; cursor: pointer;">
+                    <i class="fas fa-sun theme-icon-display"></i>
+                    <span>Switch Theme</span>
+                </a>
+                <div class="user-profile">
+                    <div class="user-avatar" id="userAvatar">AD</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Admin</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                    <button class="logout-btn" onclick="logout()" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Admin Dashboard</h1>
+                        <p class="page-subtitle">System overview and analytics</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalTickets">0</h3>
+                            <p>Total Tickets</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="openTickets">0</h3>
+                            <p>Open Tickets</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon success">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="resolvedTickets">0</h3>
+                            <p>Resolved</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon info">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalUsers">0</h3>
+                            <p>Total Users</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon danger">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalExecutives">0</h3>
+                            <p>Executives</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Recent Tickets</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Title</th>
+                                        <th>Status</th>
+                                        <th>Priority</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentTicketsTable">
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">Loading...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Executive Workload</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Total</th>
+                                        <th>Open</th>
+                                        <th>Resolved</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="executiveWorkloadTable">
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">No executives</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- All Tickets Section -->
+            <section id="tickets-section" class="content-section">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">All Tickets</h1>
+                        <p class="page-subtitle">Manage all support tickets</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Customer</th>
+                                    <th>Category</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Assigned To</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allTicketsTable">
+                                <tr>
+                                    <td colspan="9" class="text-center text-muted">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Products Section -->
+            <section id="products-section" class="content-section">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Products</h1>
+                        <p class="page-subtitle">Create and manage product catalog (latest first)</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showAddProductModal()">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Type</th>
+                                    <th>Model</th>
+                                    <th>Main Color</th>
+                                    <th>Max Price</th>
+                                    <th>Created</th>
+                                    <th>AI</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTable">
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Users Section -->
+            <section id="users-section" class="content-section">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Users</h1>
+                        <p class="page-subtitle">Manage system users</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showAddUserModal()">
+                        <i class="fas fa-plus"></i> Add User
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTable">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Executives Section -->
+            <section id="executives-section" class="content-section">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Executives</h1>
+                        <p class="page-subtitle">Support team performance</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="showAddExecutiveModal()">
+                        <i class="fas fa-plus"></i> Add Executive
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Total Assigned</th>
+                                    <th>Open</th>
+                                    <th>In Progress</th>
+                                    <th>Resolved</th>
+                                </tr>
+                            </thead>
+                            <tbody id="executivesTable">
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">No executives found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add User Modal -->
+    <div class="modal-overlay" id="addUserModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New User</h3>
+                <button class="modal-close" onclick="closeModal('addUserModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addUserForm" onsubmit="addUser(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="newUserName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="newUserEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="newUserPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <select id="newUserRole" required>
+                            <option value="CUSTOMER">Customer</option>
+                            <option value="EXECUTIVE">Executive</option>
+                            <option value="ADMIN">Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="newUserPhone">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addUserModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="document.getElementById('addUserForm').requestSubmit()">Add
+                    User</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Add Product Modal -->
+    <div class="modal-overlay" id="addProductModal">
+        <div class="modal" style="max-width: 820px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Product</h3>
+                <button class="modal-close" onclick="closeModal('addProductModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addProductForm" onsubmit="return false;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>What is it? (Type)</label>
+                            <input type="text" id="productType" placeholder="Laptop / Mobile / Sofa..." required>
+                        </div>
+                        <div class="form-group">
+                            <label>Model Name</label>
+                            <input type="text" id="modelName" placeholder="MacBook Pro 16&quot;" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Main Color</label>
+                            <input type="text" id="mainColor" placeholder="Space Black" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Other Color Options (comma separated)</label>
+                            <input type="text" id="otherColors" placeholder="Silver, Blue, Red" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Max Price</label>
+                            <input type="number" id="maxPrice" min="1" step="0.01" placeholder="2499" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Image URL</label>
+                            <input type="url" id="imageUrl" placeholder="https://..." required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Other Prices / Discounts (up to 5)</label>
+                        <div id="otherPricesList" style="display: grid; gap: 0.5rem;"></div>
+                        <div class="d-flex gap-2" style="margin-top: 0.5rem;">
+                            <button class="btn btn-secondary btn-sm" type="button" onclick="addOtherPriceField()">
+                                <i class="fas fa-plus"></i> Add Price Option
+                            </button>
+                            <div class="text-muted" style="font-size: 0.85rem; align-self: center;">
+                                Example: “₹2,399 with HDFC credit card”
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Other Information for Product Overview (Executive)</label>
+                        <textarea id="overview" rows="4" placeholder="Write additional details executives should see..."
+                            required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="display:flex; gap: 0.75rem; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="closeModal('addProductModal')">Cancel</button>
+                <button class="btn btn-primary" id="btnPostManual" onclick="submitProduct(false)">
+                    <i class="fas fa-paper-plane"></i> Post with this info
+                </button>
+                <button class="btn btn-success" id="btnPostAi" onclick="submitProduct(true)">
+                    <i class="fas fa-wand-magic-sparkles"></i> Generate product info with AI
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assign Ticket Modal -->
+    <div class="modal-overlay" id="assignModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Assign Ticket</h3>
+                <button class="modal-close" onclick="closeModal('assignModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="assignTicketForm" onsubmit="submitAssignment(event)">
+                    <input type="hidden" id="assignTicketId">
+                    <div class="form-group">
+                        <label>Ticket</label>
+                        <div id="assignTicketTitle" style="font-weight: 600; padding: 0.5rem 0; color: #764ba2;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Select Executive</label>
+                        <select id="executiveSelect" required
+                            style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
+                            <option value="">Choose an executive...</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('assignModal')">Cancel</button>
+                <button class="btn btn-primary"
+                    onclick="document.getElementById('assignTicketForm').requestSubmit()">Confirm Assignment</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js?v=2.1"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        // Mobile menu toggle functionality
+        function toggleMobileMenu() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.mobile-overlay');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
+
+            // Change icon
+            const icon = toggle.querySelector('i');
+            if (sidebar.classList.contains('mobile-open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        // Close mobile menu when clicking on nav items
+        document.addEventListener('DOMContentLoaded', function () {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    if (window.innerWidth <= 900) {
+                        toggleMobileMenu();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
