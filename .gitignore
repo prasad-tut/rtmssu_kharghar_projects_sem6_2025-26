@@ -27,9 +27,5 @@ target/
 ### Mac ###
 .DS_Store
 
-### Specific Project Ignores ###
-start.sh
-project_explanation_for_faculty.md
-
 ### Others ###
 *.log
