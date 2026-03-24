@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hrishi Microservices</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Animated Ambient Background -->
+    <div class="ambient-background">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+        <div class="glow glow-3"></div>
+    </div>
+
+    <div id="app">
+        <!-- Floating Pill Navigation -->
+        <nav class="floating-nav">
+            <div class="nav-left">
+                <a href="#" class="logo" onclick="app.navigate('dashboard')">Microservice App</a>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="#" id="nav-dashboard" class="active" onclick="app.navigate('dashboard')">Overview</a></li>
+                <li><a href="#" id="nav-tickets" onclick="app.navigate('tickets')">Tickets</a></li>
+                <li><a href="#" id="nav-users" onclick="app.navigate('users')">Directory</a></li>
+                <li><a href="#" id="nav-settings" onclick="app.navigate('settings')">Settings</a></li>
+            </ul>
+
+            <div class="nav-right">
+                <div class="avatar-capsule">
+                    <span class="avatar-dot"></span>
+                    Admin User
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+            <!-- Content injected by app.js -->
+        </main>
+    </div>
+
+    <!-- Create Ticket Modal -->
+    <div id="modal-overlay" class="hidden">
+        <div class="modal-body card">
+            <div class="flex-between" style="margin-bottom: var(--space-md);">
+                <h3>New Ticket</h3>
+                <button class="btn btn-secondary btn-icon" onclick="app.closeModal()">✕</button>
+            </div>
+            <form id="create-ticket-form" onsubmit="app.submitTicket(event)">
+                <label for="ticket-issue">Issue Description</label>
+                <input type="text" id="ticket-issue" required placeholder="What needs to be fixed?">
+
+                <label for="ticket-raisedby">User ID</label>
+                <input type="number" id="ticket-raisedby" value="1" required min="1">
+
+                <div style="text-align:right; margin-top: var(--space-lg);">
+                    <button type="button" class="btn btn-secondary" onclick="app.closeModal()" style="margin-right:8px;">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Ticket</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

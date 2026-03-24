@@ -1,0 +1,31 @@
+HELP.md
+target/
+!-Werror
+.settings/
+.springBeans
+.sts4-cache/
+.project
+.classpath
+.metadata/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac ###
+.DS_Store
+
+### Others ###
+*.log
