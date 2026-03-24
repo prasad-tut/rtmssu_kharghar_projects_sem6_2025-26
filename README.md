@@ -1,5 +1,5 @@
-# Conquest Microservices Architecture
-> A next-generation Ticket Management System built with Spring Boot, Spring Cloud OpenFeign, Eureka Service Discovery, and a modern Glassmorphism UI.
+# Microservices Architecture
+> A Ticket Management System built with Spring Boot, Spring Cloud OpenFeign, Eureka Service Discovery.
 
 ## 🚀 Architecture Overview
 This project decomposes a monolithic ticket management system into scalable, independent microservices configured to dynamically communicate via **Spring Cloud OpenFeign** over a **Netflix Eureka** Service Registry. It features automated MySQL relational database generation using Hibernate.
