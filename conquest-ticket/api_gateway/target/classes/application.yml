@@ -1,0 +1,33 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: false
+      routes:
+      - id: user-service
+        uri: lb://user-micro-service
+        predicates:
+        - Path=/user-micro-service/**
+        filters:
+        - RewritePath=/user-micro-service/(?<segment>.*), /$\{segment}
+      - id: ticket-service
+        uri: lb://ticket-service
+        predicates:
+        - Path=/ticket-service/**
+        filters:
+        - RewritePath=/ticket-service/(?<segment>.*), /$\{segment}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9000/eureka/
