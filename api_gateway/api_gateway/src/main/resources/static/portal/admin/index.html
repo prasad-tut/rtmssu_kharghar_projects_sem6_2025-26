@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - Ticket System</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body style="padding: 2rem;">
+    <h1>Admin Panel</h1>
+    <div class="portals-grid">
+        <div class="portal-card">
+            <h3>User Management</h3>
+            <p>View and manage all registered users.</p>
+            <button class="btn btn-outline" disabled>View Users (Upcoming)</button>
+        </div>
+        <div class="portal-card">
+            <h3>System Health</h3>
+            <div id="health" class="badge">Checking...</div>
+            <p>Connection to Discovery Server established.</p>
+            <a href="http://localhost:8761" target="_blank" class="btn btn-secondary">Open Eureka Dashboard</a>
+        </div>
+    </div>
+    <script>
+        // Discovery server check simulation
+        setTimeout(() => document.getElementById('health').innerHTML = 'SYSTEM HEALTHY', 1000);
+    </script>
+</body>
+</html>

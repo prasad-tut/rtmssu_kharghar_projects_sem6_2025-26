@@ -1,0 +1,18 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+target/
+bin/
+*.class
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temp files
+*.log
+*.tmp

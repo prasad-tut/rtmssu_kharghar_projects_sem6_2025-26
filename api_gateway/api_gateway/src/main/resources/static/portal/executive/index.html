@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Executive Portal - Ticket System</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body style="padding: 2rem;">
+    <h1>Executive Portal</h1>
+    <button onclick="loadTickets()" class="btn btn-primary">Refresh Tickets</button>
+    <div id="tickets-list" style="margin-top: 2rem;"></div>
+    <script>
+        async function loadTickets() {
+            const res = await fetch('/tickets');
+            const tickets = await res.json();
+            const div = document.getElementById('tickets-list');
+            div.innerHTML = tickets.map(t => `
+                <div class="portal-card" style="margin-bottom: 1rem;">
+                    <h4>${t.title} (Status: ${t.status})</h4>
+                    <p>${t.description}</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

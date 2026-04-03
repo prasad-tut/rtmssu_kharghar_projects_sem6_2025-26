@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Portal - Ticket System</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body style="padding: 2rem;">
+    <h1>Customer Portal</h1>
+    <div id="auth-section">
+        <h3>Login / Register</h3>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()" class="btn btn-primary">Login</button>
+        <button onclick="register()" class="btn btn-outline">Register</button>
+    </div>
+    <div id="ticket-section" style="margin-top: 2rem;">
+        <h3>Create Ticket</h3>
+        <input type="text" id="title" placeholder="Title">
+        <textarea id="desc" placeholder="Description"></textarea>
+        <button onclick="createTicket()" class="btn btn-primary">Submit Ticket</button>
+    </div>
+    <script>
+        async function register() {
+            const user = { username: document.getElementById('username').value, password: document.getElementById('password').value, role: 'CUSTOMER' };
+            const res = await fetch('/auth/register', { method: 'POST', body: JSON.stringify(user), headers: {'Content-Type': 'application/json'} });
+            alert(res.ok ? 'Registered!' : 'Error');
+        }
+        async function login() {
+            const user = { username: document.getElementById('username').value, password: document.getElementById('password').value };
+            const res = await fetch('/auth/login', { method: 'POST', body: JSON.stringify(user), headers: {'Content-Type': 'application/json'} });
+            const text = await res.text();
+            alert(text);
+        }
+        async function createTicket() {
+            const ticket = { title: document.getElementById('title').value, description: document.getElementById('desc').value };
+            const res = await fetch('/tickets', { method: 'POST', body: JSON.stringify(ticket), headers: {'Content-Type': 'application/json'} });
+            alert(res.ok ? 'Ticket Created!' : 'Error');
+        }
+    </script>
+</body>
+</html>
